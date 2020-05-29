@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>实时数据查看</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../../layui/css/layui.css">
+<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/my/permission.js"></script>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<style type ="text/css"> 
+.layui-table-cell {
+    font-size:14px;
+    padding:0 5px;
+    height:auto;
+    overflow:visible;
+    text-overflow:inherit;
+    white-space:normal;
+    word-break: break-all;
+}
+.layui-table-red{
+	background-color:red;
+}
+</style>
+</head>
+<body>
+    <div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header style="height: 100%">
+                    <div align="left">
+	                    <table style="width: 100%">
+									<tr>
+		                   			<td style="color:#F00;">
+		                   			<b>半场模型：主队双红，盘口3.5，25分钟之前，半大70%以上；</b>
+		                   			</td>
+		                   			</tr>
+		                   		<tr>
+	                   			<td style="color:#F00;">
+	                   			<b>模型1：下半场全红3球-80%；</b>
+	                   			</td>
+	                   			</tr>
+	                   			<tr>
+	                   			<td style="color:#F00;">
+	                   			<b>模型2：下半场红00-75%(客红 100%，主红不行)；</b>
+	                   			</td>
+	                   			</tr>
+	                   			<tr>
+	                   			<td style="color:#F00;">
+	                   			<b>模型3：半场00比赛，无视任何条件破蛋80%；</b>
+	                   			</td>
+	                   			</tr>
+	                    </table>
+					</div>
+                </header>
+                <div>
+                    <div class="widget-body">
+                       <table class="layui-table" id="test" lay-filter="test">
+                       </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+   
+</body>
+<script type="text/javascript">
+layui.use([ 'layer','table' ], function() {
+	var layer = layui.layer;
+	
+	var table = layui.table;
+	var tableIns =table.render({
+	    elem: '#test'
+	    ,url:'/realtimes/realtimes'
+	    ,type:"get"
+	    ,cols: [[
+	       {field:'datetime', title:'时间', sort: true}
+	      ,{field:'doubletype', title:'双红类型', sort: false}
+	      ,{field:'league', title:'联赛', sort: false}
+	      ,{field:'homename', title:'主队', sort: false}
+	      ,{field:'awayname', title:'客队', sort: false}
+	      ,{field:'finshscore', title:'全场比分', sort: false}
+	      ,{field:'halfscore', title:'半场比分', sort: false}
+	      ,{field:'doubletime', title:'双红时间', sort: false}
+	      ,{field:'doublescore', title:'双红比分', sort: false}
+	      ,{field:'castscore', title:'预测', sort: false}
+	      ,{field:'basepk', title:'初始盘口', sort: false}
+	      ,{field:'red', title:'红卡', sort: false}
+	      ,{field:'redtimes', title:'红卡时间', sort: false}
+	      ,{field:'goaltimes', title:'进球时间',}
+	    ]]
+	    ,page: true
+	  });
+	  //监听行单击事件（单击事件为：rowDouble）
+	  table.on('rowDouble', function(obj){
+		  var data = obj.data;
+		    
+		    layer.alert(JSON.stringify(data), {
+		      title: '当前行数据：'
+		    });
+		    
+		    //标注选中样式
+		    obj.tr.addClass('layui-table-red').siblings().removeClass('layui-table-click');
+	  
+	  });
+	  setInterval( function (){
+		  
+		  tableIns.reload();
+		  }, 1000 * 10 ); 
+});
+var pers = checkPermission();
+</script>
+</html>
+

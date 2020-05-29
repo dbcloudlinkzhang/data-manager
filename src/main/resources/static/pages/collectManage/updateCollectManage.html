@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+</head>
+<body>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<form class="form-horizontal" onsubmit="return false" id="form">
+		<fieldset>
+			<input type="hidden" id="id" name="id">
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectName</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectName' type='text' name='collectName' id='collectName' data-bv-notempty='true' data-bv-notempty-message='collectName 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectCode</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectCode' type='text' name='collectCode' id='collectCode' data-bv-notempty='true' data-bv-notempty-message='collectCode 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectAddress</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectAddress' type='text' name='collectAddress' id='collectAddress' data-bv-notempty='true' data-bv-notempty-message='collectAddress 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectAccount</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectAccount' type='text' name='collectAccount' id='collectAccount' data-bv-notempty='true' data-bv-notempty-message='collectAccount 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectPassword</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectPassword' type='text' name='collectPassword' id='collectPassword' data-bv-notempty='true' data-bv-notempty-message='collectPassword 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectIsAuth</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectIsAuth' type='text' name='collectIsAuth' id='collectIsAuth' data-bv-notempty='true' data-bv-notempty-message='collectIsAuth 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectApi</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectApi' type='text' name='collectApi' id='collectApi' data-bv-notempty='true' data-bv-notempty-message='collectApi 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectData</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectData' type='text' name='collectData' id='collectData' data-bv-notempty='true' data-bv-notempty-message='collectData 不能为空'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label class='col-md-2 control-label'>collectState</label>
+				<div class='col-md-10'>
+					<input class='form-control' placeholder='collectState' type='text' name='collectState' id='collectState' data-bv-notempty='true' data-bv-notempty-message='collectState 不能为空'>
+				</div>
+			</div>
+
+
+
+			<div class="form-actions">
+				<div class="row" align="center">
+					<div class="col-md-12">
+					    <button class="btn btn-primary" onclick="location.href='collectManageList.html'">返回</button>
+						<button class="btn btn-primary" type="submit" onclick="update()">
+							<i class="fa fa-save"></i> 保存
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+</div>
+	<script type="text/javascript" src="../../js/libs/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="../../js/jq.js"></script>
+	<script type="text/javascript" src="../../js/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../layui/layui.js"></script>
+	<script type="text/javascript">
+		layui.use(['layer','laydate'], function(){
+		    var layer = layui.layer;
+		});
+		
+		initData();
+		
+		function initData(){
+			var id = getUrlParam("id");
+			if(id != ""){
+				$.ajax({
+					type : 'get',
+					url : '/collectManages/'+id,
+					async : false,
+					success : function(data) {
+						$('#id').val(data.id);
+						$('#collectName').val(data.collectName);
+						$('#collectCode').val(data.collectCode);
+						$('#collectAddress').val(data.collectAddress);
+						$('#collectAccount').val(data.collectAccount);
+						$('#collectPassword').val(data.collectPassword);
+						$('#collectIsAuth').val(data.collectIsAuth);
+						$('#collectApi').val(data.collectApi);
+						$('#collectData').val(data.collectData);
+						$('#collectState').val(data.collectState);
+
+					}
+				});
+			}
+		}
+
+		function update() {
+			$('#form').bootstrapValidator();
+			var bootstrapValidator = $("#form").data('bootstrapValidator');
+			bootstrapValidator.validate();
+		    if(!bootstrapValidator.isValid()){
+			   return;
+		    }
+		    
+		    var formdata = $("#form").serializeObject();
+
+			$.ajax({
+				type : 'put',
+				url : '/collectManages',
+				contentType: "application/json; charset=utf-8",  
+				data : JSON.stringify(formdata),
+				success : function(data) {
+					layer.msg("修改成功", {shift: -1, time: 1000}, function(){
+                        location.href = "collectManageList.html";
+                    });
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

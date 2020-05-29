@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.security.server.dao.CollectManageDao">
+
+	<sql id="where">
+		<where>
+			<if test="params.id != null and params.id != ''">
+				and id = #{params.id} 
+			</if>
+			<if test="params.collectName != null and params.collectName != ''">
+				and collect_name = #{params.collectName} 
+			</if>
+			<if test="params.collectCode != null and params.collectCode != ''">
+				and collect_code = #{params.collectCode} 
+			</if>
+			<if test="params.collectAddress != null and params.collectAddress != ''">
+				and collect_address = #{params.collectAddress} 
+			</if>
+			<if test="params.collectAccount != null and params.collectAccount != ''">
+				and collect_account = #{params.collectAccount} 
+			</if>
+			<if test="params.collectPassword != null and params.collectPassword != ''">
+				and collect_password = #{params.collectPassword} 
+			</if>
+			<if test="params.collectIsAuth != null and params.collectIsAuth != ''">
+				and collect_isAuth = #{params.collectIsAuth} 
+			</if>
+			<if test="params.collect_api != null and params.collect_api != ''">
+				and collect_api = #{params.collectApi} 
+			</if>
+			<if test="params.collectData != null and params.collectData != ''">
+				and collect_data = #{params.collectData} 
+			</if>
+			<if test="params.collectState != null and params.collectState != ''">
+				and collect_state = #{params.collectState} 
+			</if>
+		
+		</where>
+	</sql>
+
+	<select id="count" resultType="int">
+		select count(1) from collect_manage t
+		<include refid="where" />
+	</select>
+
+	<select id="list" resultType="CollectManage">
+		select * from collect_manage t
+		<include refid="where" />
+		${params.orderBy}
+		limit #{offset}, #{limit}
+	</select>
+
+	<update id="update">
+		update collect_manage t
+		<set>
+			<if test="collectName != null">
+				collect_name = #{collectName}, 
+			</if>
+			<if test="collectCode != null">
+				collect_code = #{collectCode}, 
+			</if>
+			<if test="collectAddress != null">
+				collect_address = #{collectAddress}, 
+			</if>
+			<if test="collectAccount != null">
+				collect_account = #{collectAccount}, 
+			</if>
+			<if test="collectPassword != null">
+				collect_password = #{collectPassword}, 
+			</if>
+			<if test="collectIsAuth != null">
+				collect_isAuth = #{collectIsAuth}, 
+			</if>
+			<if test="collectApi != null">
+				collect_api = #{collectApi}, 
+			</if>
+			<if test="collectData != null">
+				collect_data = #{collectData}, 
+			</if>
+			<if test="collectState != null">
+				collect_state = #{collectState}, 
+			</if>
+
+		</set>
+
+		where t.id = #{id}
+	</update>
+
+</mapper>
